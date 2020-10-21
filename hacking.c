@@ -14,16 +14,16 @@ int countCorrect(const char *password, char *guess, int length);
 void hack(const char *password) {
 	clear();
 	getmaxyx(stdscr, maxY, maxX);
-	printw(HACK_HEADER);
+	printw(HACKING_MSG);
 
 	int passwordLength = (int) strlen(password);
 
 	generateField();
 	generateGuesses(password, passwordLength);
 
-	WINDOW *attemptWindow = newwin(maxY - HACK_HEADER_LINES - 4,
+	WINDOW *attemptWindow = newwin(maxY - HACKING_MSG_LINES - 4,
 	                                maxX - (8 + CHARS_IN_ROW) * COL_COUNT,
-	                               HACK_HEADER_LINES + 3, (8 + CHARS_IN_ROW) * COL_COUNT);
+	                               HACKING_MSG_LINES + 3, (8 + CHARS_IN_ROW) * COL_COUNT);
 	scrollok(attemptWindow, true);
 
 	while (getAttemptsCount() > 0) {
@@ -60,11 +60,11 @@ char getRandomTrashChar();
 
 void generateField() {
 	getmaxyx(stdscr, maxY, maxX);
-	int rows = maxY - HACK_HEADER_LINES - 4;
+	int rows = maxY - HACKING_MSG_LINES - 4;
 	int addr = rand() % (0xFFFF - rows * COL_COUNT * CHARS_IN_ROW) / CHARS_IN_ROW * CHARS_IN_ROW;
 	for (int col = 0; col < COL_COUNT; col++) {
 		for (int row = 0; row < rows; row++) {
-			mvprintw(row + HACK_HEADER_LINES + 3, col * (8 + CHARS_IN_ROW), "0x%04X ", addr);
+			mvprintw(row + HACKING_MSG_LINES + 3, col * (8 + CHARS_IN_ROW), "0x%04X ", addr);
 			addr += CHARS_IN_ROW;
 			for (int i = 0; i < CHARS_IN_ROW; i++)
 				addch(getRandomTrashChar());
@@ -88,13 +88,13 @@ char getRandomTrashChar() {
 #undef PUNCTUATION
 
 #define CALCULATE_YX(y,x) \
-	y = exactPosition % charsInCol / CHARS_IN_ROW + HACK_HEADER_LINES + 3; \
+	y = exactPosition % charsInCol / CHARS_IN_ROW + HACKING_MSG_LINES + 3; \
 	x = 7 + positionInRow + (CHARS_IN_ROW + 8) * (exactPosition / charsInCol)
 void placeGuess(int exactPosition, char *guess, int guessLen) {
 
 	int positionInRow = exactPosition % CHARS_IN_ROW;
 	getmaxyx(stdscr, maxY, maxX);
-	const int charsInCol = CHARS_IN_ROW * (maxY - HACK_HEADER_LINES - 4);
+	const int charsInCol = CHARS_IN_ROW * (maxY - HACKING_MSG_LINES - 4);
 
 	int placeY, placeX;
 	CALCULATE_YX(placeY, placeX);
@@ -130,7 +130,7 @@ void generateGuesses(const char* password, int passwordLen) {
 	}
 
 	getmaxyx(stdscr, maxY, maxX);
-	int charsCount = (maxY - HACK_HEADER_LINES - 4) * CHARS_IN_ROW * COL_COUNT;
+	int charsCount = (maxY - HACKING_MSG_LINES - 4) * CHARS_IN_ROW * COL_COUNT;
 	int charsPerGuess = charsCount / GUESS_COUNT;
 
 	int truePasswordIndex = rand() % GUESS_COUNT;
@@ -154,7 +154,7 @@ void generateGuesses(const char* password, int passwordLen) {
 }
 
 void updateAttempts() {
-	move(HACK_HEADER_LINES + 1, 0);
+	move(HACKING_MSG_LINES + 1, 0);
 	printw("%d ATTEMPT(S) LEFT:", getAttemptsCount());
 	for (int i = 0; i < MAX_ATTEMPTS; i++) {
 		addch(' ');
@@ -162,7 +162,7 @@ void updateAttempts() {
 	}
 	if (getAttemptsCount() == 1) {
 		attron(A_BLINK);
-		move(HACK_HEADER_LINES - 1, 0);
+		move(HACKING_MSG_LINES - 1, 0);
 		printw("!!! WARNING: LOCKOUT IMMINENT !!!");
 		attroff(A_BLINK);
 	}
