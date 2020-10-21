@@ -34,7 +34,7 @@ ENTER PASSWORD NOW"
 #define CMD_CLEAR "CLEAR"
 
 #define SHELL_PROMPT "> "
-#define PASSWORD_SUB '*' | A_BOLD
+#define PASSWORD_SUB ('*' | A_BOLD)
 
 #define MAX_ATTEMPTS 6
 #define MIN_PASSWORD_LEN 4
