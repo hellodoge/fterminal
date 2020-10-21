@@ -115,7 +115,7 @@ int cmdLogin() {
 	return 0;
 }
 
-#define TMP_MSG_POINTER "READ --PTR 0x%04X > ACCOUNTS.F"
+#define TMP_MSG_POINTER "ECHO -BS 0x%04X | WRITE --SEEK 0xF1 ACCOUNTS.F"
 int cmdHack() {
 	char *username = strtok(NULL, " ");
 	if (!username) {
